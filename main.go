@@ -10,10 +10,8 @@ import (
 	"github.com/integrii/flaggy"
 )
 
-const DEFAULT_VERSION = "unversioned"
-
 var (
-	version = DEFAULT_VERSION
+	version = "unversioned"
 	commit  string
 	date    string
 
