@@ -10,7 +10,8 @@
 			"settings": {},
 			"extensions": [
 				"streetsidesoftware.code-spell-checker",
-				"golang.Go"
+				"golang.Go",
+				"github.vscode-github-actions"
 			]
 		}
 	},
