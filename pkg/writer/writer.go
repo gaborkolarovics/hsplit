@@ -6,6 +6,8 @@ import (
 	"github.com/bobg/hashsplit"
 )
 
+// Writer is an io.WriteCloser that splits its input with a hashsplit.Splitter,
+// It additionally assembles those chunks into a tree with a hashsplit.TreeBuilder.
 type Writer struct {
 	spl    *hashsplit.Splitter
 	tb     *hashsplit.TreeBuilder
@@ -13,6 +15,7 @@ type Writer struct {
 	prefix string
 }
 
+// Option is the type of an option passed to NewWriter.
 type Option = func(*Writer)
 
 // NewWriter produces a new Writer writing to the file.
@@ -131,12 +134,14 @@ func Fanout(n uint) Option {
 	}
 }
 
+// Prefix is an option for NewWriter that sets a file name prefeix to io.writer
 func Prefix(s string) Option {
 	return func(w *Writer) {
 		w.prefix = s
 	}
 }
 
+// IntToLetters is convert number to alpha to chunk sufix. Like aa, ab, ac..
 func IntToLetters(number int32) (letters string) {
 	number--
 	if firstLetter := number / 26; firstLetter > 0 {
