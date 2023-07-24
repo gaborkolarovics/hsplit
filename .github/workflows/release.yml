@@ -36,4 +36,4 @@ jobs:
         goarch: ${{ matrix.goarch }}
         binary_name: hsplit
         build_flags: -v
-        ldflags: -X "main.appVersion=${{ env.APP_VERSION }}" -X "main.date=${{ env.BUILD_TIME }}" -X main.commit=${{ github.sha }}
+        ldflags: -X "main.version=${{ env.APP_VERSION }}" -X "main.date=${{ env.BUILD_TIME }}" -X main.commit=${{ github.sha }}
