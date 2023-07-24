@@ -29,6 +29,8 @@ jobs:
     name: Go Linter
     runs-on: ubuntu-latest
     steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v3
     - name: go1.19 linter
       uses: shoukoo/golang-pipeline/go1.19/linter@master
       with:
