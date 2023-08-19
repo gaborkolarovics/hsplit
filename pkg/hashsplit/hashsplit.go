@@ -104,7 +104,10 @@ func Split(r io.Reader, f func([]byte, uint) error) error {
 func NewSplitter(f func([]byte, uint) error) *Splitter {
 	rs := buzhash32.New()
 	var zeroes [windowSize]byte
-	rs.Write(zeroes[:]) // initialize the rolling checksum window
+	_, err := rs.Write(zeroes[:]) // initialize the rolling checksum window
+	if err != nil {
+		panic(err)
+	}
 
 	return &Splitter{f: f, rs: rs}
 }
