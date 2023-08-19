@@ -15,11 +15,12 @@ var (
 	commit  string
 	date    string
 
-	fileName string
-	prefix   string = "x"
-	bits     uint   = 16
-	minSize  int    = 1024
-	fanout   uint   = 8
+	fileName       string
+	prefix         string = "x"
+	bits           uint   = 16
+	minSize        int    = 1024
+	minBytesOfPart int    = 1024
+	fanout         uint   = 8
 )
 
 func main() {
@@ -42,6 +43,7 @@ func main() {
 	flaggy.UInt(&bits, "b", "bits", "SplitBits is the number of trailing zero bits in the rolling checksum required to produce a chunk.")
 	flaggy.Int(&minSize, "m", "minSize", "MinSize is the minimum chunk size.")
 	flaggy.UInt(&fanout, "f", "fanout", "Fan-out of the nodes in the tree produced.")
+	flaggy.Int(&minBytesOfPart, "p", "minBytesOfPart", "MinBytesOfPart is the minimum file part size")
 
 	flaggy.SetVersion(info)
 	flaggy.Parse()
@@ -52,7 +54,7 @@ func main() {
 	}
 	defer f.Close()
 
-	w := writer.NewWriter(writer.Prefix(prefix), writer.Bits(bits), writer.Fanout(fanout), writer.MinSize(minSize))
+	w := writer.NewWriter(writer.Prefix(prefix), writer.Bits(bits), writer.Fanout(fanout), writer.MinSize(minSize), writer.MinBytesOfPart(minBytesOfPart))
 	_, err = io.Copy(w, f)
 	if err != nil {
 		check(err)

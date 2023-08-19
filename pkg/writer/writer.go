@@ -3,7 +3,7 @@ package writer
 import (
 	"os"
 
-	"github.com/bobg/hashsplit"
+	"github.com/gaborkolarovics/hsplit/pkg/hashsplit"
 )
 
 // Writer is an io.WriteCloser that splits its input with a hashsplit.Splitter,
@@ -31,25 +31,26 @@ func NewWriter(opts ...Option) *Writer {
 		F: func(node *hashsplit.TreeBuilderNode) (hashsplit.Node, error) {
 
 			if len(node.Chunks) > 0 {
-				x++
-
-				f, err := os.Create(w.prefix + IntToLetters(x))
-				if err != nil {
-					return nil, err
-				}
 
 				for i, chunk := range node.Chunks {
+					x++
+
+					f, err := os.Create(w.prefix + IntToLetters(x))
+					if err != nil {
+						return nil, err
+					}
+
 					repr := chunk
-					_, err := f.Write(chunk)
+					_, err = f.Write(chunk)
 					if err != nil {
 						return nil, err
 					}
 					node.Chunks[i] = repr
-				}
 
-				err = f.Close()
-				if err != nil {
-					return nil, err
+					err = f.Close()
+					if err != nil {
+						return nil, err
+					}
 				}
 
 			}
@@ -65,6 +66,7 @@ func NewWriter(opts ...Option) *Writer {
 
 	spl.MinSize = 1024
 	spl.SplitBits = 16
+	spl.MinBytesOfPart = 1024
 	w.spl = spl
 
 	for _, opt := range opts {
@@ -118,6 +120,14 @@ func Bits(n uint) Option {
 func MinSize(n int) Option {
 	return func(w *Writer) {
 		w.spl.MinSize = n
+	}
+}
+
+// MinBytesOfPart is an option for NewWriter that sets a lower bound on the size of a file part.
+// The default is 1 048 576 byte
+func MinBytesOfPart(n int) Option {
+	return func(w *Writer) {
+		w.spl.MinBytesOfPart = n
 	}
 }
 
